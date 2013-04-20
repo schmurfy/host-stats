@@ -18,7 +18,7 @@ module HostStats
       Lib::sigar_open(sigar)
       @sigar = sigar.get_pointer(0)
       
-      if defined?('ObjectSpace')
+      if Object.const_defined?('ObjectSpace')
         ObjectSpace.define_finalizer(@sigar, SigarProbe.finalize(@sigar))
       end
     end

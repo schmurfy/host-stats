@@ -55,10 +55,9 @@ module HostStats
         libcall('sigar_cpu_list_get', cpus.addr)
         
         arr = FFI::Pointer.new(Lib::CpuStruct, cpus[:data])
-        
         res = ["cpu.global"]
         
-        0.upto(cpus[:number] - 1).each do |n|
+        (0.. cpus[:number]-1).each do |n|
           res << "cpu.#{n}"
         end
         
@@ -79,8 +78,8 @@ module HostStats
       end
       
     private
-      def convert_cpu_result(cpu)        
-        cpu.members.inject({}) do |ret, key|
+      def convert_cpu_result(cpu)
+        cpu.class.members.inject({}) do |ret, key|
           ret[key] = (cpu[key].to_f / cpu[:total]) * 100
           ret
         end
