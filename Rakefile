@@ -25,3 +25,27 @@ task :test do
   runner.report_results()
 
 end
+
+#
+# build a single big file for
+# easier debugging with Mruby
+# 
+task :mrbpack do
+  # read MRBFILES
+  load(File.expand_path('../mrbgem.rake', __FILE__))
+  
+  test_file_path = File.expand_path('../mruby_test.rb', __FILE__)
+  target_files = MRBFILES << test_file_path
+  
+  FileUtils.mkdir_p('tmp')
+  cd 'tmp' do
+    File.open('blob.rb', 'w') do |f|
+      target_files.each do |path|
+        f.puts "# #{path} ==============="
+        f.write( File.read(path) )
+        f.puts
+        f.puts
+      end
+    end
+  end
+end
