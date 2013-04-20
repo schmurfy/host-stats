@@ -1,6 +1,7 @@
 LIB_ROOT = File.expand_path('../lib/host-stats', __FILE__)
 
 MRBFILES = [
+    File.join(LIB_ROOT, 'mruby.rb'),
     File.join(LIB_ROOT, 'probe.rb'),
     File.join(LIB_ROOT, 'sigar_probe.rb'),
     File.join(LIB_ROOT, 'probes/cpu.rb')
