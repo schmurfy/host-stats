@@ -4,6 +4,11 @@ gemspec
 
 gem 'rake'
 
+group(:local) do
+  gem 'rb-blink1'
+end
+
+
 group(:test) do
   gem 'eetee',          '~> 0.0.4'
   gem 'mocha',          '~> 0.12.0'

@@ -49,3 +49,10 @@ task :mrbpack do
     end
   end
 end
+
+
+task :mrbtest => :mrbpack do
+  # replace ourself with mruby process
+  Process.exec('mruby tmp/blob.rb')
+end
+
