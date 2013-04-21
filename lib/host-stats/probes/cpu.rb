@@ -66,7 +66,7 @@ module HostStats
 
       
       def query(resource_name)
-        if resource_name == 'cpu.global'
+        if resource_name == 'global'
           query_global()
           
         elsif resource_name.start_with?('cpu.')
@@ -79,8 +79,9 @@ module HostStats
       
     private
       def convert_cpu_result(cpu)
+        total = cpu[:total]
         cpu.class.members.inject({}) do |ret, key|
-          ret[key] = (cpu[key].to_f / cpu[:total]) * 100
+          ret[key.to_s] = (cpu[key].to_f / total) * 100
           ret
         end
       end
@@ -94,13 +95,12 @@ module HostStats
       
       def query_core(n)
         cpus = Lib::CpuListStruct.new
-        check_error!(
-            Lib::sigar_cpu_list_get(@sigar, cpus.addr)
-          )
-        
+        libcall('sigar_cpu_list_get', cpus.addr)
+                
         arr = FFI::Pointer.new(Lib::CpuStruct, cpus[:data])
         
         cpu = Lib::CpuStruct.new(arr[n].addr)
+
         convert_cpu_result(cpu)
       end
     

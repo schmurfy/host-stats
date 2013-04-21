@@ -16,23 +16,23 @@ describe 'CPU probe' do
   end
   
   should 'return global usage' do
-    ret = @p.query('cpu.global')
+    ret = @p.query('global')
     ret.class.should == Hash
     
-    ret[:user].should.not == nil
-    ret[:sys].should.not == nil
-    ret[:idle].should.not == nil
-    ret[:total].should >= ret[:user] + ret[:sys] + ret[:idle]
+    ret['user'].should.not == nil
+    ret['sys'].should.not == nil
+    ret['idle'].should.not == nil
+    ret['total'].should >= ret['user'] + ret['sys'] + ret['idle']
   end
   
   should 'return usage for one core' do
     ret = @p.query('cpu.1')
     ret.class.should == Hash
     
-    ret[:user].should.not == nil
-    ret[:sys].should.not == nil
-    ret[:idle].should.not == nil
-    ret[:total].should >= ret[:user] + ret[:sys] + ret[:idle]
+    ret['user'].should.not == nil
+    ret['sys'].should.not == nil
+    ret['idle'].should.not == nil
+    ret['total'].should >= ret['user'] + ret['sys'] + ret['idle']
   end
 
 end

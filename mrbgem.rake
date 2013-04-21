@@ -4,7 +4,11 @@ MRBFILES = [
     File.join(LIB_ROOT, 'mruby.rb'),
     File.join(LIB_ROOT, 'probe.rb'),
     File.join(LIB_ROOT, 'sigar_probe.rb'),
-    File.join(LIB_ROOT, 'probes/cpu.rb')
+    File.join(LIB_ROOT, 'probes/cpu.rb'),
+    File.join(LIB_ROOT, 'probes/memory.rb'),
+    File.join(LIB_ROOT, 'probes/swap.rb'),
+    File.join(LIB_ROOT, 'probes/uptime.rb'),
+    File.join(LIB_ROOT, 'probes/load_avg.rb')
   ]
 
 if defined?(MRuby)
