@@ -1,18 +1,11 @@
 
 require 'ffi'
 
+require File.expand_path('../files', __FILE__)
+
 require File.expand_path('../host-stats/version', __FILE__)
 
-RBFILES = [
-  'probe',
-  'sigar_probe',
-  'probes/cpu',
-  'probes/memory',
-  'probes/load_avg',
-  'probes/swap',
-  'probes/uptime'
-]
-
+require File.expand_path('../../ext/hoststats', __FILE__)
 
 RBFILES.each do |path|
   require File.expand_path("../host-stats/#{path}", __FILE__)

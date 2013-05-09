@@ -1,4 +1,4 @@
-require File.expand_path('../lib/host-stats', __FILE__)
+require File.expand_path('../lib/files', __FILE__)
 LIB_ROOT = File.expand_path('../lib/host-stats', __FILE__)
 
 MRBFILES = [
