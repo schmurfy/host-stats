@@ -4,7 +4,15 @@ module HostStats
     module Lib
       extend FFI::Library
       
-      ffi_lib '/Users/Schmurfy/Dev/personal/sigar/src/.libs/libsigar.dylib'
+      [
+        '/Users/Schmurfy/Dev/personal/sigar/src/.libs/libsigar.dylib',
+        '/usr/local/lib/libsigar.so'
+      ].each do |path|
+        if ::File.exist?(path)
+          ffi_lib(path)
+          break
+        end
+      end
       
       # SIGAR_DECLARE(int) sigar_open(sigar_t **sigar);
       attach_function :sigar_open, [:pointer], :int
