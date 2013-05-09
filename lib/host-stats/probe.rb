@@ -18,14 +18,5 @@ module HostStats
         end
       end
   end
-  
-  class SigarProbe < Probe
-    module Lib
-      extend FFI::Library
-      
-      ffi_lib '/Users/Schmurfy/Dev/personal/sigar/src/.libs/libsigar.dylib'
-    end
     
-  end
-  
 end
