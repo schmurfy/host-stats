@@ -80,6 +80,10 @@ module HostStats
         el
       end
     end
+    
+    def struct_convert_string_value(el)
+      el.to_ptr.read_string()
+    end
         
     def struct_to_hash(data, actions = {})
       data.class.members.inject({}) do |ret, key|
