@@ -21,3 +21,22 @@ conf.gem :github => 'schmurfy/host-stats', :branch => 'master'
 and you are done, just build mruby with "rake"
 
 
+# Usage
+
+```ruby
+cpus = HostStats::Probes::Cpu.new
+p cpus.list()
+
+# global stats
+p cpus.query('cpu.global')
+
+# cpu specific stats
+p cpus.query('cpu.0')
+p cpus.query('cpu.1')
+```
+
+
+# Current state
+
+The library is still in an early stage, api may change without warning.
+
