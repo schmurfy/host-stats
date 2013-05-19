@@ -15,5 +15,7 @@ if defined?(MRuby)
     spec.authors = 'Julien Ammous'
     
     spec.rbfiles = MRBFILES
+    
+    spec.add_dependency('mruby-rubyffi-compat', '>= 0.0.0')
   end
 end
