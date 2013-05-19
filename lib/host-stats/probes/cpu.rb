@@ -36,8 +36,8 @@ module HostStats
       
       class CpuListStruct < FFI::Struct
         layout(
-            :number,  :uint64,
-            :size,    :uint64,
+            :number,  :ulong,
+            :size,    :ulong,
             :data,    :pointer
           )
       end
