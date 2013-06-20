@@ -97,8 +97,10 @@ module HostStats
         
         # initialize cache
         @history[0] = query_global(false)
-        list().each.with_index do |name, n|
-          @history[n + 1] = query_core(n, false)
+        n = 1
+        list().each do |name|
+          @history[n] = query_core(n, false)
+          n += 1
         end
       end
       
