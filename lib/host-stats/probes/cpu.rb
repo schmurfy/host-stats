@@ -42,14 +42,66 @@ module HostStats
           )
       end
       
+      
+      # typedef struct {
+      #     double user;
+      #     double sys;
+      #     double nice;
+      #     double idle;
+      #     double wait;
+      #     double irq;
+      #     double soft_irq;
+      #     double stolen;
+      #     double combined;
+      # } sigar_cpu_perc_t;
+      
+      class CpuPerc < FFI::Struct
+        layout(
+            :user,      :double,
+            :sys,       :double,
+            :nice,      :double,
+            :idle,      :double,
+            :wait,      :double,
+            :irq,       :double,
+            :soft_irq,  :double,
+            :stolen,    :double,
+            :combined,  :double
+          )
+      end
+      
       # SIGAR_DECLARE(int) sigar_cpu_list_get(sigar_t *sigar, sigar_cpu_list_t *cpulist);
       attach_function :sigar_cpu_list_get, [:pointer, :pointer], :int
       
       # SIGAR_DECLARE(int) sigar_cpu_get(sigar_t *sigar, sigar_cpu_t *cpu);
       attach_function :sigar_cpu_get, [:pointer, :pointer], :int
+      
+      # SIGAR_DECLARE(int) sigar_cpu_perc_calculate(sigar_cpu_t *prev, sigar_cpu_t *curr, 
+      #   sigar_cpu_perc_t *perc);
+      attach_function :sigar_cpu_perc_calculate, [:pointer, :pointer, :pointer], :int
+
     end
     
+    ##
+    # This probes works differently than the others, it works by comparing snapshot
+    # of the cpu activity, when you create the object a cache is initialized and
+    # then each time you query the value the result is compared with the latest
+    # snapshot.
+    # 
+    # NOTE: do not call query immediately after object creation it will return a
+    # structure filled with NaN
+    # 
     class Cpu < SigarProbe
+      def initialize()
+        super
+        @history = []
+        
+        # initialize cache
+        @history[0] = query_global(false)
+        list().each.with_index do |name, n|
+          @history[n + 1] = query_core(n, false)
+        end
+      end
+      
       def list()
         cpus = Lib::CpuListStruct.new
         libcall('sigar_cpu_list_get', cpus.addr)
@@ -70,7 +122,7 @@ module HostStats
           query_global()
           
         elsif resource_name.start_with?('cpu.')
-          n = resource_name[4..-1].to_i
+          n = resource_name[-1].to_i
           query_core(n)
         else
           nil
@@ -78,22 +130,29 @@ module HostStats
       end
       
     private
-      def convert_cpu_result(cpu)
-        total = cpu[:total]
-        cpu.class.members.inject({}) do |ret, key|
-          ret[key.to_s] = (cpu[key].to_f / total) * 100
+      def convert_cpu_result(history_index, cpu)
+        last_measure = @history[history_index]
+        @history[history_index] = cpu
+        
+        diff = Lib::CpuPerc.new
+        check_error!(
+            Lib.sigar_cpu_perc_calculate(last_measure, cpu, diff)
+          )
+        
+        diff.class.members.inject({}) do |ret, key|
+          ret[key.to_s] = diff[key] * 100
           ret
         end
       end
       
-      def query_global()
+      def query_global(convert = true)
         cpu = Lib::CpuStruct.new
         libcall('sigar_cpu_get', cpu.addr)
-        convert_cpu_result(cpu)
+        convert ? convert_cpu_result(0, cpu) : cpu
       end
       
       
-      def query_core(n)
+      def query_core(n, convert = true)
         cpus = Lib::CpuListStruct.new
         libcall('sigar_cpu_list_get', cpus.addr)
                 
@@ -101,7 +160,7 @@ module HostStats
         
         cpu = Lib::CpuStruct.new(arr[n].addr)
 
-        convert_cpu_result(cpu)
+        convert ? convert_cpu_result(n + 1, cpu) : cpu
       end
     
     end
