@@ -3,6 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 describe 'CPU probe' do
   before do
     @p = HostStats::Probes::Cpu.new
+    sleep(0.1)
   end
   
   should 'return cpu cores count' do
@@ -22,7 +23,7 @@ describe 'CPU probe' do
     ret['user'].should.not == nil
     ret['sys'].should.not == nil
     ret['idle'].should.not == nil
-    ret['total'].should >= ret['user'] + ret['sys'] + ret['idle']
+    ret['combined'].should >= ret['user'] + ret['sys'] + ret['wait']
   end
   
   should 'return usage for one core' do
@@ -32,7 +33,7 @@ describe 'CPU probe' do
     ret['user'].should.not == nil
     ret['sys'].should.not == nil
     ret['idle'].should.not == nil
-    ret['total'].should >= ret['user'] + ret['sys'] + ret['idle']
+    ret['combined'].should >= ret['user'] + ret['sys'] + ret['wait']
   end
 
 end
