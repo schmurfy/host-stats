@@ -6,3 +6,7 @@ coverage/
 doc/
 *.sublime*
 *test.rb
+ext/Makefile
+ext/*.bundle
+ext/*.so
+tmp/blob.rb
