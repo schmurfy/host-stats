@@ -137,10 +137,7 @@ module HostStats
         @history[history_index] = cpu
         
         diff = Lib::CpuPerc.new
-        check_error!(
-            Lib.sigar_cpu_perc_calculate(last_measure, cpu, diff)
-          )
-        
+        check_error! Lib.sigar_cpu_perc_calculate(last_measure.addr, cpu.addr, diff.addr)
         diff.class.members.inject({}) do |ret, key|
           ret[key.to_s] = diff[key] * 100
           ret
