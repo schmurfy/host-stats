@@ -10,7 +10,7 @@ end
 
 
 group(:test) do
-  gem 'eetee',          '~> 0.0.4'
+  gem 'eetee',          '~> 0.0.5'
   gem 'mocha',          '~> 0.12.0'
   gem 'factory_girl'
   
