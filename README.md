@@ -15,7 +15,7 @@ the gem in your build_config.rb, if you have a local copy this would be:
 (you need my mruby-cfunc fork untils changes got merged)
 ```ruby
 conf.gem :github => 'schmurfy/mruby-cfunc', :branch => 'ruby_ffi'
-conf.gem :github => 'schmurfy/host-stats', :branch => 'master'
+conf.gem :github => 'schmurfy/mruby-host-stats', :branch => 'master'
 ```
 
 and you are done, just build mruby with "rake"

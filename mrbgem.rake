@@ -10,7 +10,7 @@ RBFILES.each do |path|
 end
 
 if defined?(MRuby)
-  MRuby::Gem::Specification.new('host-stats') do |spec|
+  MRuby::Gem::Specification.new('mruby-host-stats') do |spec|
     spec.license = 'MIT'
     spec.authors = 'Julien Ammous'
     spec.version = "0.0.1"
